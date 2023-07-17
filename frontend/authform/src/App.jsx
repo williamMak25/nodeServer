@@ -5,6 +5,7 @@ import { Signup } from './component/signup'
 import { Home } from './component/home'
 import { Privateroute } from './component/privateroute'
 import { Signin } from './component/SignIn'
+import { EditForm } from './component/editForm'
 
 function App() {
   
@@ -14,6 +15,7 @@ function App() {
     <Routes>
       <Route element={<Privateroute/>}>
         <Route path='/' element={<Home/>}/>
+        <Route path='/edit' element={<EditForm/>}/>
       </Route>
       <Route path='/login' element={<Signin/>}/>
       <Route path='/signup' element={<Signup/>}/>

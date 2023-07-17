@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 app.use((req,res,next)=>{
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Credentials', "true");
+    res.header("Access-Control-Allow-Methods","DELETE , PUT")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization,Cookies,X-email");
     next();
 })

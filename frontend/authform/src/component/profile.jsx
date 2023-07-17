@@ -32,7 +32,7 @@ export const Profile = ({setClick}) => {
                 username: profileData.username,
                 gender: profileData.gender,
                 age: profileData.age,
-                email: profileData.email,
+                email: access_email,
                 bio: profileData.bio,
             })
         }).then( res => navigate("/"))
@@ -63,7 +63,7 @@ export const Profile = ({setClick}) => {
             <input type='text'  name='bio' onChange={handlechange}/>
             
             <button onClick={handleSubmit}>Done</button>
-            <button onClick={()=>setClick(false)}>Cancel</button>
+            <button onClick={()=>setClick(false)}  className='cancal'>Cancel</button>
         </form>
     </div>
   )

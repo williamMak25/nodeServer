@@ -7,7 +7,8 @@ const validateToken = require("../middleware/middleware")
 const mongoose = require("mongoose")
 const uri = "mongodb+srv://lwinwinyanwai:waiyan2521@cluster0.kzygcaa.mongodb.net/?retryWrites=true&w=majority"
 const Users = require("../model/users");
-const Profile = require("../model/profile")
+const Profile = require("../model/profile");
+const Data = require("../model/data")
 
 mongoose.connect(uri)
 .then( res => {
@@ -33,8 +34,8 @@ router.post("/signup",[
     }
     
     let finduser = await Users.find({email:email});
-    if(finduser){
-      return res.status(400).res.json({error:[
+    if(finduser.length !== 0){
+      return res.status(400).json({error:[
         {message:  "Email is already registered"}
       ]})
     }
@@ -59,6 +60,7 @@ router.post("/signup",[
 })
 
 // all profile route
+
 router.post("/profile",async (req,res)=>{
   const {username,gender,age,email,bio} = req.body
   let checkemail = await Profile.find({email,email});
@@ -101,6 +103,27 @@ router.get("/profile",validateToken,async (req,res)=>{
    res.json({profileCheck})
 })
 
+router.put("/profile/:id",async(req,res)=>{
+  const id = req.params.id;
+  const data = req.body
+  console.log(data , id)
+  Profile.findByIdAndUpdate(id,data)
+  .then(result => {
+    res.json(result)
+  })
+  .catch( err => res.json(err))
+ 
+})
+
+
+router.delete("/profile/:id",async (req,res)=>{
+  const id = req.params.id
+  console.log(id)
+  Profile.findByIdAndRemove(id)
+   .then( result => res.send("deleteed"))
+   .catch( err => res.status(404).json(err))
+
+})
 
 // user sign in route
 router.post("/login" , async (req,res)=>{

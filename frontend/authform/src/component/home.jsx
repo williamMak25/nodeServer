@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import "../App.css"
 import { Profile } from './profile'
+import { NavLink } from 'react-router-dom';
+import { EditForm } from './editForm';
 
 export const Home = () => {
   const [click,setClick] = useState(false);
   const [profile,setProfile] = useState([])
+  const [edit,setEdit] = useState(false)
   const access_email = JSON.parse(localStorage.getItem("access-email"))
+
   const handleOpen = (e) => {
     e.preventDefault();
     setClick(true)
@@ -32,24 +36,42 @@ export const Home = () => {
     location.reload()
   }
 
+  const handleDelete = async() =>{
+   await fetch(`http://localhost:3002/auth/profile/${profile[0]._id}`,{
+      method:"DELETE"
+    }).then( (res) => {
+      document.cookie = "access-token" + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      localStorage.removeItem("access-email")
+      location.reload()
+    }).catch( err => console.log(err))
+  }
   return (
     <div className='home_container'>
-      <h1 style={{color:'skyblue'}}>Wellcome</h1>
+      <div className='header_container'>
+        <h1>Wellcome</h1>
+        <span>{profile ? profile[0].email : null}</span>
+      </div>
+
       {click ? <Profile setClick={setClick}/> : null}
       {!profile.length ? <div>Loading...</div> :
-      profile.length !== 0 ? profile.map( data => {
+      !edit ? profile.map( data => {
         return(
           <div className='profile_wrapper' key={data._id}>
-            <span>username : {data.username}</span>
-            <p style={{fontSize:12}}>{data.email}</p>
-            <small>user bio : {data.bio}</small>
-            <p style={{fontSize:12}}>age : {data.age}/{data.gender}</p>
+            <div>
+              <p>username : <span style={{color:"green",fontWeight:"bold"}}> {data.username} </span></p>
+              
+              <p>user bio : <span style={{color:"green",fontWeight:"bold"}}> {data.bio} </span></p>
+              <p>age : <span style={{color:"green",fontWeight:"bold"}}> {data.age} </span></p>
+            <p>gender :<span style={{color:"green",fontWeight:"bold"}}> {data.gender} </span></p>
+            </div>
+            <button onClick={handleDelete}>Delete Account</button>
           </div>
         )
-      }):null
+      }):<EditForm edit={setEdit} profileData={profile}/>
     }
-      <button onClick={handleOpen}>{profile.length === 0 ? "Create" : "edit"} Profile</button>
-      <button onClick={handleLogout}>Sign out</button>
+      <button onClick={()=>setEdit(true)} className='normal'>Edit</button>
+      <button onClick={handleOpen} className='normal'>Create Profile</button>
+      <button onClick={handleLogout} className='cancal'>Sign out</button>
     </div>
   )
 }

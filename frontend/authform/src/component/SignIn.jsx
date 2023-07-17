@@ -8,8 +8,8 @@ export const Signin = () => {
     const [open,setOpen] = useState(false);
     const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
-    const access_email = JSON.parse(localStorage.getItem("access-email"))
-  console.log(access_email)
+   // const access_email = JSON.parse(localStorage.getItem("access-email"))
+
     useEffect(()=>{
       if(email === "" || password === ""){
         setOpen(true)
